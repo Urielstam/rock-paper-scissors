@@ -5,8 +5,18 @@
 // return the random item at index of random number
 // console.log to see if works
 
+function getPlayerChoice() {
+    let playerSelection = prompt("Choose your weapon");
+    playerSelection = playerSelection.toLowerCase();
+    if (playerSelection === "rock" || playerSelection === "paper" || playerSelection === "scissors") {
+        return playerSelection
+    } else {
+        alert("Invalid! choose rock/paper/scissors and refresh the page");
+    }
+}
+
 function getComputerChoice() {
-    let array = ["scissors", "paper", "rock"];
+    let array = ["rock", "paper", "scissors"];
     let numberOfItems = array.length;
     let randomNumber = Math.floor(Math.random() * numberOfItems);
     return array[randomNumber];
@@ -63,6 +73,7 @@ function playRound(playerSelection, computerSelection) {
 
 
 function game(playerSelection) {
+    playerSelection = getPlayerChoice();
     let wins = 0;
     let losses = 0;
     for (let i = 0; i < 5; i++) {
@@ -79,15 +90,18 @@ function game(playerSelection) {
         }
     }
     if (wins === losses) {
+        alert("Well Done, Draw.");
         return "Well Done, Draw.";
     }
     else if (wins > losses) {
+        alert("Excellent, You Win!");
         return "Excellent, You Win!";
     } else {
+        alert("Uh Oh, You Lose :(");
         return "Uh Oh, You Lose :(";
     }
 }
 
-console.log(game("Rock"));
+console.log(game());
 
 
