@@ -1,18 +1,22 @@
-// Create function getComputerChoice that will randomly return a choice
-// Create array of choices
-// Find how many items there are in array
-// Based on number of items, get a random number from 0 to array.length
-// return the random item at index of random number
-// console.log to see if works
+// Create getPlayerChoice function
+// Add event listener of type click on each button
+// For the event recieve the button text/content 
 
-function getPlayerChoice() {
-    let playerSelection = prompt("Choose your weapon");
-    playerSelection = playerSelection.toLowerCase();
-    if (playerSelection === "rock" || playerSelection === "paper" || playerSelection === "scissors") {
-        return playerSelection
-    } else {
-        alert("Invalid! choose rock/paper/scissors and refresh the page");
-    }
+
+
+let playerSelection = "";
+let result = document.querySelector('div.result');
+let player = document.querySelector('.player');
+let computer = document.querySelector('.computer');
+let wins = 0;
+let losses = 0;
+
+const buttons = document.querySelectorAll('button');
+for(const button of Array.from(buttons)) {
+    button.addEventListener('click', (event) => {
+        playerSelection = event.target.textContent;
+        game(playerSelection);
+    });
 }
 
 function getComputerChoice() {
@@ -22,86 +26,80 @@ function getComputerChoice() {
     return array[randomNumber];
 }
 
+
+
 // Create playRound function to see who's the winner
 // First check if it is a draw, bcs that is the simplest case
 // Else check if for each possibilty whether or not player will lose or win
 
 function playRound(playerSelection, computerSelection) {
-    playerSelection = playerSelection.toLowerCase();
     if (playerSelection === computerSelection){
-        return "Draw!"
+        return result.textContent = "Draw";
     }
     else if (playerSelection === "scissors") {
         if (computerSelection === "paper") {
-            return "You Win! Scissors beats Paper";
+            return result.textContent = "You Win! Scissors beats Paper";
         } else {
-            return "You lose! Rock beats Scissors";
+            return result.textContent = "You lose! Rock beats Scissors";
         }
     }
     else if (playerSelection === "paper") {
         if (computerSelection === "rock") {
-            return "You Win! Paper beats Rock"; 
+            return result.textContent = "You Win! Paper beats Rock"; 
         } else {
-            return "You Lose! Scissors beats paper";
+            return result.textContent = "You Lose! Scissors beats paper";
         }
     }
     else if (playerSelection === "rock") {
         if (computerSelection === "scissors") {
-            return "You Win! Rock beats Scissors"; 
+            return result.textContent = "You Win! Rock beats Scissors"; 
         } else {
-            return "You Lose! Paper beats Rock";
+            return result.textContent = "You Lose! Paper beats Rock";
         }
     }
 }
 
-// Create a gamae function
-// playRound 5 times
-
-// Record wins in variable
-    // Store the return value in a variable as string
-    // split string by spaces and store in an array
-    // if the array contains one item, output round as draw
-    // if the array contains more than one item
-    // check if item in index two equals Win! or Lose!
-    // if Win! -> increment variable wins by 1
-    // if Lose! -> increment losses by 1
-
-// output if draw,loss or win based on wins
-// if wins === losses -> output "Well Done, Draw."
-// if wins > losses -> output "Excellent, You Win!"
-// else output "Uh Oh, You Lose :("
+// once wins or losses reaches 5, display winner
 
 
 function game(playerSelection) {
-    playerSelection = getPlayerChoice();
-    let wins = 0;
-    let losses = 0;
-    for (let i = 0; i < 5; i++) {
-        let computerSelection = getComputerChoice();
-        let result = playRound(playerSelection, computerSelection);
-        console.log(result);
-        let stringArr = result.split(" ");
-        if (stringArr.length > 1) {
-            if(stringArr[1] === "Win!") {
-                wins++;
-            } else {
-                losses++;
+    let computerSelection = getComputerChoice();
+    let winner = playRound(playerSelection, computerSelection);
+    let stringArr = String(winner).split(" ");
+    if (stringArr.length > 1) {
+        let text = "";
+        if(stringArr[1] === "Win!") {
+            wins++;
+            if (wins !== 5) {
+                player.textContent = `Player: ${wins}`;
+            }
+            else {
+                text = "Excellent, You Win Game!";
+                displayWinner(text);
+            }
+        } 
+        else {
+            losses++;
+            if (losses !== 5) {
+                computer.textContent = `Computer: ${losses}`;
+            }
+            else {
+                text = "Uh Oh, You Lost Game :(";
+                displayWinner(text);
             }
         }
     }
-    if (wins === losses) {
-        alert("Well Done, Draw.");
-        return "Well Done, Draw.";
-    }
-    else if (wins > losses) {
-        alert("Excellent, You Win!");
-        return "Excellent, You Win!";
-    } else {
-        alert("Uh Oh, You Lose :(");
-        return "Uh Oh, You Lose :(";
-    }
 }
 
-console.log(game());
+function displayWinner (text) {
+    let displayWinnerMsg = document.createElement('div');
+    if (player) document.body.removeChild(player);
+    if (computer) document.body.removeChild(computer);
+    if (result) document.body.removeChild(result);
+    if (!displayWinnerMsg.textContent) {
+        displayWinnerMsg.textContent =  text;
+        document.body.appendChild(displayWinnerMsg);
+    };
+}
 
 
